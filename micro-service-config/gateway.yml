@@ -6,20 +6,20 @@ spring:
       - PrefixPath=/
       routes:
       #=========================
-      - id: flashcard
-        uri: lb://flashcard
+      - id: register
+        uri: lb://register
         predicates:
-        - Path=/flashcard/**
+        - Path=/register/**
         filters:
         - StripPrefix=1
         - name: CircuitBreaker
           args:
-            name: flashcard-fallback
-            fallbackUri: forward:/fallback/flashcard
+            name: register-fallback
+            fallbackUri: forward:/fallback/register
       #=========================
-      - id: quiz
-        uri: lb://quiz
+      - id: login
+        uri: lb://login
         predicates:
-        - Path=/quiz/**
+        - Path=/login/**
         filters:
         - StripPrefix=1
