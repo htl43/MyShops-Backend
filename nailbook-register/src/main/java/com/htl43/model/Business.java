@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -33,16 +34,24 @@ public class Business {
 	@Column(name="business_id")
 	private int id;
 	
+	@NotNull
 	private String name;
+	
+	@NotNull
 	private String type;
+	
+	@Column (unique = true)
+	@NotNull
 	private String address;
+	
 	private String phone;
 	private String status;
 	private Date activated_date;
 	private Date deactivated_date;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="owner_id")
+	@JsonBackReference
 	private OwnerAccount owner;
 	
 

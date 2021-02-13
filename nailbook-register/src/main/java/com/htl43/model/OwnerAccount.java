@@ -11,7 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -30,13 +33,18 @@ public class OwnerAccount {
 	private  int id;
 	
 	@Column (unique = true)
+	@NotNull
 	private String email;
 	private String phone;
+	@NotNull
 	private String password;
+	@NotNull
 	private String firstname;
+	@NotNull
 	private String lastname;
 	
-	@OneToMany(mappedBy = "owner", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "owner", fetch=FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
+	@JsonManagedReference
 	private List<Business> listBusinesses;
 
 	
