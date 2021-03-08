@@ -58,5 +58,21 @@ public class OwnerAccount {
 		this.lastname = lastname;
 		this.listBusinesses = listBusinesses;
 	}
+
+
+	public OwnerAccount(int id, String email, String phone, String password, String firstname, String lastname) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.phone = phone;
+		this.password = password;
+		this.firstname = firstname;
+		this.lastname = lastname;
+	}
+
+
+	
+	
+	
 	
 }

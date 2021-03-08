@@ -37,8 +37,8 @@ public class AccountController {
 	public ResponseEntity registerOwnerAccount(@RequestBody OwnerAccount ownerAccount) {
 		try {
 			ownerAccount.setPassword(ownerService.encryptPassword(ownerAccount.getPassword()));
-			ownerService.saveCustomerAccount(ownerAccount);
-			return ResponseEntity.status(201).build();
+			OwnerAccount confirmAccount = ownerService.saveCustomerAccount(ownerAccount);
+			return ResponseEntity.status(201).body(confirmAccount);
 		} catch (BusinessException e) {
 			return ResponseEntity.status(409).body(e.getMessage());
 		}
@@ -46,22 +46,8 @@ public class AccountController {
 		
 	}
 	
-	@GetMapping("/owner/id/{id}")
-	public ResponseEntity getAccountByOwnerId(@PathVariable int id) {
-		System.out.println("getting owner by id " + id);
-		try {
-			OwnerAccount ownerAccount = ownerService.findOwnerById(id);
-			return ResponseEntity.status(200).body(ownerAccount);
-		} catch (BusinessException e) {
-			return ResponseEntity.status(404).body(e.getMessage());
-		}
-		
-	}
-	
-	
 	@PutMapping("/owner/update")
 	public ResponseEntity updateOwnerAccount(@RequestBody OwnerAccount ownerAccount) {	
-		System.out.println("getting owner delete request" + ownerAccount);
 		try {
 			ownerService.updateAccountByFieldChange(ownerAccount);		
 			return ResponseEntity.status(202).build();
@@ -83,8 +69,8 @@ public class AccountController {
 	@PostMapping("/business/add")
 	public ResponseEntity addBusiness(@RequestBody Business business) {		
 		try {
-			businessService.addOwnerBusiness(business);
-			return ResponseEntity.status(201).build();
+			Business confirmBusiness = businessService.addOwnerBusiness(business);
+			return ResponseEntity.status(201).body(confirmBusiness);
 		} catch (BusinessException e) {
 			return ResponseEntity.status(409).body(e.getMessage());
 		}	
@@ -92,7 +78,6 @@ public class AccountController {
 	
 	@DeleteMapping("/business/remove")
 	public ResponseEntity removeBusiness(@RequestBody Business business) {
-		System.out.println("getting business remove request" + business);
 		try {
 			businessService.removeOwnerBusiness(business);
 			return ResponseEntity.status(202).build();
@@ -103,7 +88,6 @@ public class AccountController {
 	
 	@PatchMapping("/business/update")
 	public ResponseEntity updateBusiness(@RequestBody Business business) {	
-		System.out.println("getting owner delete request" + business);
 		try {
 			businessService.updateBusinessByFieldChange(business);
 			return ResponseEntity.status(202).build();

@@ -29,16 +29,21 @@ public class BusinessService {
 		this.ownerService = ownerService;
 	}
 	
-	public void addOwnerBusiness(Business business) throws BusinessException{
+	public Business addOwnerBusiness(Business business) throws BusinessException{
 		
 		int ownerId = business.getOwner().getId();
 
 		try {
 			OwnerAccount owner = ownerService.findOwnerById(ownerId);
 			business.setOwner(owner);
-			businessDAO.save(business);
-		} catch (NestedRuntimeException e) {
-			throw new BusinessException(e.getMostSpecificCause().getMessage());
+			Business confirmBusiness = businessDAO.save(business);
+			if(confirmBusiness!=null) {
+				return confirmBusiness;
+			} else {
+				throw new BusinessException("Sorry! System can't save this business");
+			}
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage());
 		}	
 	}
 
@@ -102,8 +107,8 @@ public class BusinessService {
 				}
 			}
 		} 
-		catch (NestedRuntimeException e) {
-			throw new BusinessException(e.getMostSpecificCause().getMessage());
+		catch (Exception e) {
+			throw new BusinessException(e.getMessage());
 		}
 		
 	}

@@ -32,12 +32,19 @@ public class OwnerAccountService {
 		return Integer.toString(result);
 	}
 
-	public void saveCustomerAccount(OwnerAccount ownerAccount) throws BusinessException {
+	public OwnerAccount saveCustomerAccount(OwnerAccount ownerAccount) throws BusinessException {		
 		try {
-			ownerDao.save(ownerAccount);		
-		} catch (NestedRuntimeException e) {
-			throw new BusinessException(e.getMostSpecificCause().getMessage());
+			OwnerAccount confirmAccount = ownerDao.save(ownerAccount);
+			if(confirmAccount!=null) {
+				return confirmAccount;
+			} else {
+				throw new BusinessException("Sorry! System can't save owner account");
+			}
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage());
 		}
+		
+		
 	}
 	
 	public OwnerAccount findOwnerById(int id) throws BusinessException {
@@ -54,7 +61,6 @@ public class OwnerAccountService {
 	
 	public OwnerAccount getAccountByLoginDTO(LoginDTO ownerLogin) throws BusinessException {
 		ownerLogin.setPassword(encryptPassword(ownerLogin.getPassword()));
-		System.out.println("Get Request Login 1 " + ownerLogin);
 		Optional<OwnerAccount> ownerOpt = ownerDao.findOwnerByEmailAndPassword(ownerLogin.getEmail(), ownerLogin.getPassword());
 		OwnerAccount owner = null;
 		if(ownerOpt.isPresent()) {
@@ -106,8 +112,8 @@ public class OwnerAccountService {
 				}
 			}
 		} 
-		catch (NestedRuntimeException e) {
-			throw new BusinessException(e.getMostSpecificCause().getMessage());
+		catch (Exception e) {
+			throw new BusinessException(e.getMessage());
 		}
 	}
 
@@ -118,8 +124,8 @@ public class OwnerAccountService {
 		try {
 			ownerDao.deleteById(ownerAccount.getId());
 		}
-		catch (NestedRuntimeException e) {
-			throw new BusinessException(e.getMostSpecificCause().getMessage());
+		catch (Exception e) {
+			throw new BusinessException(e.getMessage());
 		}		
 	}
 
